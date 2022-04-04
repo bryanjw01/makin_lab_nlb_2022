@@ -1,32 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@bryanjw01 
-swhsiang
-/
-diva-fork
-Private
-Code
-Issues
-1
-Pull requests
-Actions
-Projects
-Security
-Insights
-diva-fork/.gitignore
-@swhsiang
-swhsiang add .gitignore file
-Latest commit 5620b9b on Feb 3, 2020
- History
- 2 contributors
-@bryanjw01@swhsiang
-129 lines (105 sloc)  1.76 KB
-   
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
