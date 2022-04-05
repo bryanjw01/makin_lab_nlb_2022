@@ -44,43 +44,19 @@ run:
 setup:
 	pip install -r requirements.txt
 
-# Test dataloader.py
-test_dataloader:
-	python3 -m unittest tests/src/test_dataloader.py 
-
-# Test train.py
-test_train:
-	python3 -m unittest tests/src/test_train.py 
-
-# Test bayes_tuning.py
-test_tuning:
-	python3 -m unittest tests/src/test_bayes_tuning.py
-
-# Test load_model.py
-test_load_model:
-	python3 -m unittest tests/src/test_load_model.py 
-
-# Test Models/*.py
-test_models:
-	python3 -m unittest tests/src/test_models.py
+# Test config.py
+test_config:
+	python3 -m unittest tests/src/test_config.py
 
 # Test all
-test_all: test_train test_tuning test_load_model test_models test_dataloader
+test: test_config
 
 # Get rid of pycache inside tests folder directory
 clean_tests:
-	find tests/src | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
+	find tests | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
 
-# Get rid of pycache inside tests/Transformer directory
-clean_tests_models:
-	find tests/src/models | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
-
-# Get rid of pycache inside Transformer directory
+# Get rid of pycache inside src directory
 clean_src:
-	find src | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
-
-# Get rid of pycache inside Transformer directory
-clean_src_models:
 	find src | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
 
 # Get rid of files inside of data
@@ -100,4 +76,7 @@ clean_log:
 	rm -r -f src/log/*.csv
 
 # Get rid of pycache
-clean: clean_tests clean_tests_models clean_src clean_src_models
+clean: clean_tests clean_src
+
+# get rid of pycache, csv, h5, ckpt
+very_clean: clean_tests clean_src clean_log clean_checkpoint clean_results

@@ -1,20 +1,23 @@
 from enum import Enum
+import os
 import torch 
 
-CHECKPOINT_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/src/checkpoint'
+DIR_NAME = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 
-LOG_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/src/log'
+CHECKPOINT_PATH = f'{DIR_NAME}/src/checkpoint'
 
-RESULT_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/results'
+LOG_PATH = f'{DIR_NAME}/src/log'
+
+RESULT_PATH = f'{DIR_NAME}/results'
 
 DATAPATH_DICT = {
-    'mc_maze': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000128/sub-Jenkins/',
-    'mc_rtt': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000129/sub-Indy/',
-    'area2_bump': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000127/sub-Han/',
-    'dmfc_rsg': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000130/sub-Haydn/',
-    'mc_maze_large': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000138/sub-Jenkins/',
-    'mc_maze_medium': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000139/sub-Jenkins/',
-    'mc_maze_small': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000140/sub-Jenkins/',
+    'mc_maze': f'{DIR_NAME}/data/000128/sub-Jenkins/',
+    'mc_rtt': f'{DIR_NAME}/data/000129/sub-Indy/',
+    'area2_bump': f'{DIR_NAME}/data/000127/sub-Han/',
+    'dmfc_rsg': f'{DIR_NAME}/data/000130/sub-Haydn/',
+    'mc_maze_large': f'{DIR_NAME}/data/000138/sub-Jenkins/',
+    'mc_maze_medium': f'{DIR_NAME}/data/000139/sub-Jenkins/',
+    'mc_maze_small': f'{DIR_NAME}/data/000140/sub-Jenkins/',
 }
 
 class MODEL(Enum):
@@ -31,7 +34,7 @@ class DATASET(Enum):
     MC_MAZE_MEDIUM = 'mc_maze_medium'
     MC_MAZE_SMALL = 'mc_maze_small'
 
-MODEL_TYPE = MODEL.NEURAL_R_ROBERTA
+MODEL_TYPE = MODEL.NEURAL_ROBERTA
 
 DATASET_TYPE = DATASET.MC_MAZE_SMALL
 
