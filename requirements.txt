@@ -1,20 +1,21 @@
 # nlb_tools
 git+https://github.com/neurallatents/nlb_tools
 
-# PyTorch (for modeling)
-torch
-
 # DANDI CLI tool (optional, can use website instead)
-dandi
+dandi==0.38.0
+dandischema==0.6.0
 
 # EvalAI-CLI (optional, can use website instead)
-evalai
+evalai==1.3.16
+
+# Numpy (for data)
+numpy==1.21.5
+
+# Matplotlib (for plotting loss)
+matplotlib
 
 # HuggingFace Transformers
 transformers
 
-# Numpy (for data)
-numpy
-
-# Matplotlib (for plotting loss)
-matplotlib
+# PyTorch (for modeling)
+torch
