@@ -1,27 +1,32 @@
-EVAL=1
-TRAIN=0
-
+# Download mc_maze_small dataset from dandi
 download_mc_maze_small:
 	dandi download https://dandiarchive.org/dandiset/000140
 
+# Download mc_maze_medium dataset from dandi
 download_mc_maze_medium:
 	dandi download https://dandiarchive.org/dandiset/000139
 
+# Download mc_maze_large dataset from dandi
 download_mc_maze_large:
 	dandi download https://dandiarchive.org/dandiset/000138
 
+# Download mc_maze dataset from dandi
 download_mc_maze:
 	dandi download https://dandiarchive.org/dandiset/000128
 
+# Download mc_rtt dataset from dandi
 download_mc_rtt:
 	dandi download https://dandiarchive.org/dandiset/000129
 
+# Download dmfc dataset from dandi
 download_dmfc:
 	dandi download https://dandiarchive.org/dandiset/000127
 
+# Download area2bump dataset from dandi
 download_area2bump:
 	dandi download https://dandiarchive.org/dandiset/000130
 
+# Download all datasets from dandi
 download_all: 
 	download_mc_maze_small 
 	download_mc_maze_medium 
@@ -33,11 +38,11 @@ download_all:
 
 # Run main.py file to 
 run_eval:
-	python3 -m src.main $(EVAL)
+	python3 -m src.main 
 
 # Run main.py file to train the model
 run_training:
-	python3 -m src.main $(TRAIN)
+	python3 -m src.main
 
 # Setup Environment
 setup:
