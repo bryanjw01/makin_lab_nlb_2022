@@ -1,5 +1,5 @@
-import torch 
 from enum import Enum
+import torch 
 
 CHECKPOINT_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/src/checkpoint'
 
