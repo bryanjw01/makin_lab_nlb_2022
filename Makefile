@@ -37,12 +37,8 @@ download_area2bump:
 download_all: download_mc_maze_small download_mc_maze_medium download_mc_maze_large download_mc_maze download_mc_rtt download_dmfc download_area2bump
 
 # Run main.py file to 
-run_eval:
+run:
 	python3 -m src.main 
-
-# Run main.py file to train the model
-run_training:
-	python3 -m src.main
 
 # Setup Environment
 setup:
