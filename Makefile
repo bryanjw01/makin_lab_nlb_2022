@@ -83,6 +83,22 @@ clean_src:
 clean_src_models:
 	find src | grep -E "(__pycache__|\.pyc|\.pyo$))" | xargs rm -rf
 
+# Get rid of files inside of data
+clean_data:
+rm -r -f data/*
+
+# Get rid of all h5 files from result directory
+clean_results:
+rm -r -f results/*.h5
+
+# Get rid of all ckpt files from checkpoint directory
+clean_checkpoint:
+rm -r -f src/checkpoint/*.ckpt
+
+# Get rid of all csv files from log directory
+clean_log:
+rm -r -f src/log/*.csv
+
 # Get rid of pycache
 clean: clean_tests clean_tests_models clean_src clean_src_models
 
