@@ -1,4 +1,4 @@
-from config import DATASET_NAME, MODEL_NAME, CHECKPOINT_PATH
+from config import DATASET_TYPE, MODEL_TYPE, PHASE, CHECKPOINT_PATH, USE_GPU, DEVICE
 import numpy as np
 import os
 
@@ -11,14 +11,13 @@ from torch import nn
 
 class Trainer:
     """Class that handles training"""
-    def __init__(self, model_init, data, train_cfg, use_gpu=False, num_gpus=1):
+    def __init__(self, model_init, data, train_cfg, num_gpus=1):
         self.model = model_init
         self.data = data
-        if use_gpu and torch.cuda.is_available():
-            device = torch.device('cuda:0')
+        if USE_GPU and torch.cuda.is_available():
             gpu_idxs = np.arange(min(num_gpus, torch.cuda.device_count())).tolist()
-            self.model = torch.nn.DataParallel(self.model.to(device), device_ids=gpu_idxs)
-            self.data = tuple([d.to(device) for d in self.data])
+            self.model = torch.nn.DataParallel(self.model.to(DEVICE), device_ids=gpu_idxs)
+            self.data = tuple([d.to(DEVICE) for d in self.data])
         self.cd_ratio = train_cfg.get('cd_ratio', 0.2)
         self.optimizer = torch.optim.Adam(self.model.parameters(), 
                                         lr=train_cfg.get('lr', 1e-3), 
@@ -105,7 +104,7 @@ class Trainer:
         assert "state_dict" not in data
         assert "optim_state" not in data
         default_ckpt.update(data)
-        torch.save(default_ckpt, os.path.join(CHECKPOINT_PATH, f'{MODEL_NAME}_{DATASET_NAME}.ckpt'))
+        torch.save(default_ckpt, os.path.join(CHECKPOINT_PATH, f'{PHASE}_{MODEL_TYPE.name}_{DATASET_TYPE.name}.ckpt'))
     
 if __name__ == "__main__":
     print(Trainer())

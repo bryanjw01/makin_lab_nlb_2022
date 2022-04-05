@@ -1,12 +1,46 @@
-MODEL_NAME = ''
+import torch 
+from enum import Enum
 
-DATASET_NAME = 'mc_maze_small'
+class MODEL(Enum):
+    RNN_F = 'RNN-F' # RNN-F
+    NEURAL_ROBERTA = 'Neural_RoBERTa' # Neural RoBERTa
+    NEURAL_R_ROBERTA = 'Neural_r_RoBERTa' # Neural r-RoBERTa
 
-CHECKPOINT_PATH = '../checkpoint/'
+class DATASET(Enum):
+    MC_MAZE =  'mc_maze'
+    MC_RTT =  'mc_rtt'
+    AREA2_BUMP = 'area2_bump'
+    DMFC = 'dmfc_rsg'
+    MC_MAZE_LARGE = 'mc_maze_large'
+    MC_MAZE_MEDIUM = 'mc_maze_medium'
+    MC_MAZE_SMALL = 'mc_maze_small'
+
+MODEL_TYPE = MODEL.NEURAL_ROBERTA
+DATASET_TYPE = DATASET.MC_MAZE_SMALL
+
+USE_GPU = torch.cuda.is_available()
+
+MAX_GPUS = 1
+
+CHECKPOINT_PATH = './checkpoint/'
+
+LOG_PATH = './log/'
+
+RESULT_PATH = '../results/'
 
 PHASE = 'test'
 
+DEVICE = torch.device('cuda' if USE_GPU else 'cpu')
+
+TEST_SIZE = 0.25
+
 BIN_SIZE = 5
+
+VERBOSE = True
+
+PATIENCE = 5000
+
+EPOCHS = 20000
 
 DATAPATH_DICT = {
     'mc_maze': '../data/000128/sub-Jenkins/',

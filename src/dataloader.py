@@ -1,12 +1,16 @@
-from config import DATAPATH_DICT, DATASET_NAME, PHASE, BIN_SIZE
+from config import DATAPATH_DICT, DATASET_TYPE, PHASE, BIN_SIZE, TEST_SIZE
 import numpy as np
 
 from nlb_tools.nwb_interface import NWBDataset
 from nlb_tools.make_tensors import make_train_input_tensors, make_eval_input_tensors
 
+import torch 
+
 class DataLoader:
     def __init__(self):
-        self.training_input, self.training_output, self.eval_input, self.dataset = self.get_data(DATASET_NAME, PHASE, BIN_SIZE)
+        self.train_input, self.train_output, self.eval_input, self.train_dict, self.eval_dict, self.dataset = self.get_data(DATASET_TYPE.name, PHASE, BIN_SIZE)
+        self.train_size = int(round(self.training_input.shape[0] * (1 - TEST_SIZE)))
+        
 
     def get_data(self, dataset_name, phase='test', bin_size=5):
         """Function that extracts and formats data for training model"""
@@ -39,16 +43,19 @@ class DataLoader:
                 eval_dict['eval_spikes_heldin'].shape[2]
             )),
         ], axis=1)
-        return training_input, training_output, eval_input, dataset
-    
-    def get_training_data(self):
-        return self.training_input, self.training_input
-
-    def get_eval_data(self):
-        return self.eval_input
+        return training_input, training_output, eval_input, train_dict, eval_dict, dataset
     
     def get_dataset(self):
         return self.dataset
+    
+    def get_train_set(self):
+        return torch.Tensor(self.train_input[:self.num_train]), torch.Tensor(self.train_output[:self.num_train])
+
+    def get_test_set(self):
+        return torch.Tensor(self.train_input[self.num_train:]), torch.Tensor(self.train_output[self.num_train:])
+
+    def get_val_set(self):
+        return torch.Tensor(self.eval_input)
 
 if __name__ == "__main__":
     pass

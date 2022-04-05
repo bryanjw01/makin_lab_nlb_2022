@@ -1,106 +1,69 @@
 import argparse
-from config import CONFIG
+
+from dataloader import DataLoader as DL
+from config import CONFIG, LOG_PATH, RESULT_PATH, PHASE, PATIENCE, VERBOSE, EPOCHS,\
+     MODEL_TYPE, DATASET_TYPE, DEVICE, MAX_GPUS, MODEL
+from load_model import Loader
+import gc
+
+from nlb_tools.evaluation import evaluate
+from nlb_tools.make_tensors import make_eval_target_tensors
 from nlb_tools.make_tensors import save_to_h5
 
+
+import numpy as np
+import pandas as pd
+
+import os
+
+from train import Trainer
+
+if MODEL_TYPE == MODEL.RNN_F:
+    from model.RNN_F import RNN_F as Model
+elif MODEL_TYPE == MODEL.NEURAL_ROBERTA:
+    from model.Neural_RoBERTa import Neural_RoBERTa as Model
+elif MODEL_TYPE == MODEL.NEURAL_R_ROBERTA:
+    from model.Neural_r_RoBERTa import Neural_r_RoBERTa as Model
+
 def main():
-    # Run parameters
-    # dataset_name = 'area2_bump'
-    phase = 'test'
-    bin_size = 5
-
     # Extract data
-    training_input, training_output, eval_input = get_data(dataset_name, phase, bin_size)
+    dl = DL()
+    if True:
+        # Load model config
+        cfg = CONFIG[MODEL_TYPE.name]
+        # Add input and output dimension to cfg
+        cfg['input_dim'] = dl.train_input.shape[2]
+        cfg['output_dim'] = dl.train_output.shape[2]
+        # Create Model
+        model = Model(cfg).to(DEVICE)
+        train_input, train_output, val_input, val_output = dl.get_train_set(), dl.get_test_set() 
+        runner = Trainer(
+            model_init=model,
+            data=(train_input, train_output, val_input, val_output, dl.get_val_set()),
+            train_cfg={'lr': cfg['LR'], 'alpha': cfg['WEIGHT'], 'cd_ratio': cfg['RATIO']},
+            num_gpus=MAX_GPUS
+        )
 
-    # Train/val split and convert to Torch tensors
-    num_train = int(round(training_input.shape[0] * 0.75))
-    train_input = torch.Tensor(training_input[:num_train])
-    train_output = torch.Tensor(training_output[:num_train])
-    val_input = torch.Tensor(training_input[num_train:])
-    val_output = torch.Tensor(training_output[num_train:])
-    eval_input = torch.Tensor(eval_input)
+        train_log = runner.train(n_iter=EPOCHS, patience=PATIENCE, verbose=VERBOSE)
+        train_log = pd.DataFrame(train_log)
+        train_log.to_csv(os.path.join(LOG_PATH, f'{PHASE}_{MODEL_TYPE.name}_{DATASET_TYPE.name}_train_log.csv'))
+        del runner.model
+        del model
+        gc.collect()
 
-    # Model hyperparams
-    L2_WEIGHT = 5e-7
-    LR_INIT = 1.0e-3
-    CD_RATIO = 0.27
-    HIDDEN_DIM = 40
-    DROPOUT = 0.47
+    # Load Best Model
+    model = Loader.load_model().to(DEVICE)
 
+    # Evaluate train set + eval set
+    model.eval()
+    training_predictions = model(dl.get_train_set[0].to(DEVICE)).cpu().detach().numpy()
+    eval_predictions = model(dl.get_val_set.to(DEVICE)).cpu().detach().numpy()
 
-    RUN_NAME = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '_model'
-    RUN_DIR = './runs/'
-
-    gc.collect()
-    print(dataset_name)
-    USE_GPU = True
-    MAX_GPUS = 1
-
-    init = {'input_dim': train_input.shape[2], 'hidden_dim': HIDDEN_DIM, 'output_dim': train_output.shape[2], 'dropout': DROPOUT, 'model': model}
-    model_2 = Roberta(**init).to('cuda')
-
-    if not os.path.isdir(RUN_DIR):
-        os.mkdir(RUN_DIR)
-
-    runner = NLBRunner(
-        model_init=model_2,
-        model_cfg={'input_dim': train_input.shape[2], 'hidden_dim': HIDDEN_DIM, 'output_dim': train_output.shape[2], 'dropout': DROPOUT},
-        data=(train_input, train_output, val_input, val_output, eval_input),
-        train_cfg={'lr': LR_INIT, 'alpha': L2_WEIGHT, 'cd_ratio': CD_RATIO},
-        use_gpu=USE_GPU,
-        num_gpus=MAX_GPUS,
-    )
-
-    model_dir = os.path.join(RUN_DIR, RUN_NAME)
-    # if 
-    # os.mkdir(os.path.join(RUN_DIR, RUN_NAME))
-    train_log = runner.train(n_iter=20000, patience=5000, save_path=os.path.join(model_dir, 'model.ckpt'), verbose=True)
-
-    # Save results
-    import pandas as pd
-    train_log = pd.DataFrame(train_log)
-    train_log.to_csv(os.path.join(model_dir, 'train_log.csv'))
-
-    checkpoint = torch.load(os.path.join(model_dir, "model.ckpt"))
-    runner.model.load_state_dict(checkpoint['state_dict'])
-
-    training_input = torch.Tensor(
-    np.concatenate([
-        train_dict['train_spikes_heldin'], 
-        np.zeros(train_dict['train_spikes_heldin_forward'].shape), # zeroed inputs for forecasting
-    ], axis=1))
-
-    training_output = torch.Tensor(
-        np.concatenate([
-            np.concatenate([
-                train_dict['train_spikes_heldin'],
-                train_dict['train_spikes_heldin_forward'],
-            ], axis=1),
-            np.concatenate([
-                train_dict['train_spikes_heldout'],
-                train_dict['train_spikes_heldout_forward'],
-            ], axis=1),
-        ], axis=2))
-
-    eval_input = torch.Tensor(
-    np.concatenate([
-        eval_dict['eval_spikes_heldin'],
-        np.zeros((
-            eval_dict['eval_spikes_heldin'].shape[0],
-            train_dict['train_spikes_heldin_forward'].shape[1],
-            eval_dict['eval_spikes_heldin'].shape[2]
-        )),
-    ], axis=1))
-
-    torch.save(runner.model, 'model.pt')
-    runner.model.eval()
-    training_predictions = runner.model(training_input).cpu().detach().numpy()
-    eval_predictions = runner.model(eval_input).cpu().detach().numpy()
-
-    tlen = train_dict['train_spikes_heldin'].shape[1]
-    num_heldin = train_dict['train_spikes_heldin'].shape[2]
+    tlen = dl.train_dict['train_spikes_heldin'].shape[1]
+    num_heldin = dl.train_dict['train_spikes_heldin'].shape[2]
 
     submission = {
-        dataset_name: {
+        DATASET_TYPE.name: {
             'train_rates_heldin': training_predictions[:, :tlen, :num_heldin],
             'train_rates_heldout': training_predictions[:, :tlen, num_heldin:],
             'eval_rates_heldin': eval_predictions[:, :tlen, :num_heldin],
@@ -110,7 +73,16 @@ def main():
         }
     }
 
-    save_to_h5(submission, 'submission.h5')
+    save_to_h5(submission, os.path.join(RESULT_PATH, f'{PHASE}_{MODEL_TYPE.name}_{DATASET_TYPE.name}.h5'))
+
+    if PHASE == 'train':
+        target_dict = make_eval_target_tensors(dataset=dl.get_dataset(), 
+                                       dataset_name=DATASET_TYPE.name,
+                                       train_trial_split='train',
+                                       eval_trial_split='val',
+                                       include_psth=True,
+                                       save_file=False)
+        print(evaluate(target_dict, submission))
 
 if __name__ == "__main__":
     pass
