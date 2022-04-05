@@ -14,7 +14,7 @@ Neural Latent Workshop Submission
    make setup
    ```
 2. download datasets from dandi:
-   * If using **conda** then:
+   * If using **conda**:
       ```
       conda install -c conda-forge dandi
       ```
