@@ -21,7 +21,7 @@ Neural Latent Workshop Submission
       make download_mc_maze_small
       ```
       * Otherwise:
-       ```
+      ```
       make download_mc_maze_small 
       ```
 3. Edit makin_lab_nlb_2022/src/config.py:
