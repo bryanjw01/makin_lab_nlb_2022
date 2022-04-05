@@ -9,19 +9,27 @@ Neural Latent Workshop Submission
 ## Setup
 
 1. Download dependencies from requirements.txt:
-    ```
-    make setup
-    ```
+      ```
+      make setup
+      ```
 2. download datasets from dandi:
-    ```
-    make download_all 
-    ```
+      * If using **conda** then do:
+      ```
+      conda install -c conda-forge dandi
+      ```
+      ```
+      make download_mc_maze_small
+      ```
+      * Otherwise:
+       ```
+      make download_mc_maze_small 
+      ```
 3. Edit makin_lab_nlb_2022/src/config.py:
-    * Change paths (LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, DATA_PATH_DICT)
-    * Choose dataset + model
+      * Change paths (LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, DATA_PATH_DICT)
+      * Choose dataset + model
 
 4. Running 
-    ```
-    make run
-    ```
+      ```
+      make run
+      ```
   
