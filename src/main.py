@@ -4,7 +4,7 @@ sys.path.append('src')
 import argparse
 from dataloader import DataLoader as DL
 from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, VERBOSE, \
-    EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, MODEL
+    EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, MODEL, TRAIN
 from load_model import Loader
 import gc
 
@@ -31,7 +31,7 @@ def main():
     # Extract data
     print("Loading Data")
     dl = DL(DATASET_TYPE.value, PHASE, BIN_SIZE, TEST_SIZE)
-    if True and MODEL_TYPE != MODEL.NEURAL_R_ROBERTA:
+    if TRAIN:
         print("Loading Model")
         # Load model config
         cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
@@ -69,21 +69,42 @@ def main():
         # Delete models and use garbage collection to clear memory
         del runner.model
         del model
+
         gc.collect()
+        # Load Best Model
+        cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
 
-    # Load Best Model
-    cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
+        # Add input and output dimension to cfg
+        cfg['input_dim'] = dl.train_input.shape[2]
+        cfg['output_dim'] = dl.train_output.shape[2]
 
-    # Add input and output dimension to cfg
-    cfg['input_dim'] = dl.train_input.shape[2]
-    cfg['output_dim'] = dl.train_output.shape[2]
+        # Create Model
+        print('Loading Best Model')
+        model = Model(cfg)
+        model.to(DEVICE)
 
-    # Create Model
-    print('Loading Best Model')
-    model = Model(cfg).to(DEVICE)
-    checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
-    model.load_state_dict(checkpoint['state_dict'])
-    model.to(DEVICE)
+        if EPOCHS != 0:
+            checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
+            assert checkpoint, f"Checkpoint for model is {checkpoint}"
+            model.load_state_dict(checkpoint['state_dict'])
+            model.to(DEVICE)
+
+    else:
+        # Load Best Model
+        cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
+
+        # Add input and output dimension to cfg
+        cfg['input_dim'] = dl.train_input.shape[2]
+        cfg['output_dim'] = dl.train_output.shape[2]
+
+        # Create Model
+        print('Loading Best Model')
+        model = Model(cfg)
+        model.to(DEVICE)
+        checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
+        assert checkpoint, f"Checkpoint for model is {checkpoint}"
+        model.load_state_dict(checkpoint['state_dict'])
+        model.to(DEVICE)
 
     # Evaluate train set + eval set
     print('Starting Evaluation Step')
@@ -105,7 +126,7 @@ def main():
         }
     }
     print('saving submission')
-    save_to_h5(submission, os.path.join(RESULT_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}.h5'))
+    save_to_h5(submission, os.path.join(RESULT_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}.h5'), overwrite=True)
 
     if PHASE == 'train':
         target_dict = make_eval_target_tensors(dataset=dl.get_dataset(), 
