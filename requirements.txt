@@ -1,20 +1,20 @@
 # nlb_tools
-pip install git+https://github.com/neurallatents/nlb_tools.git 
+git+https://github.com/neurallatents/nlb_tools
 
 # PyTorch (for modeling)
-pip install torch
+torch
 
 # DANDI CLI tool (optional, can use website instead)
-pip install dandi
+dandi
 
 # EvalAI-CLI (optional, can use website instead)
-pip install evalai
+evalai
 
 # HuggingFace Transformers
-pip install transformers
+transformers
 
 # Numpy (for data)
-pip install numpy
+numpy
 
 # Matplotlib (for plotting loss)
-pip install matplotlib
+matplotlib
