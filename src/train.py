@@ -1,4 +1,3 @@
-from config import DATASET_TYPE, MODEL_TYPE, PHASE, CHECKPOINT_PATH, USE_GPU, DEVICE
 import numpy as np
 import os
 
@@ -11,18 +10,22 @@ from torch import nn
 
 class Trainer:
     """Class that handles training"""
-    def __init__(self, model_init, data, train_cfg, num_gpus=1):
-        self.model = model_init
+    def __init__(self, model, data, train_cfg, num_gpus, model_name, dataset_name, checkpoint_path, phase='test', use_gpu=True, device=torch.device('cpu')):
+        self.model = model
         self.data = data
-        if USE_GPU and torch.cuda.is_available():
+        if use_gpu and torch.cuda.is_available():
             gpu_idxs = np.arange(min(num_gpus, torch.cuda.device_count())).tolist()
-            self.model = torch.nn.DataParallel(self.model.to(DEVICE), device_ids=gpu_idxs)
-            self.data = tuple([d.to(DEVICE) for d in self.data])
+            self.model = torch.nn.DataParallel(self.model.to(device), device_ids=gpu_idxs)
+            self.data = tuple([d.to(device) for d in self.data])
         self.cd_ratio = train_cfg.get('cd_ratio', 0.2)
         self.optimizer = torch.optim.Adam(self.model.parameters(), 
                                         lr=train_cfg.get('lr', 1e-3), 
                                         weight_decay=train_cfg.get('alpha', 0.0))
         self.loss = torch.nn.PoissonNLLLoss(log_input=False)
+        self.checkpoint_path = checkpoint_path
+        self.phase = phase
+        self.model_name = model_name
+        self.dataset_name = dataset_name
     
     def make_cd_mask(self, train_input, train_output):
         """Creates boolean mask for coordinated dropout.
@@ -104,7 +107,7 @@ class Trainer:
         assert "state_dict" not in data
         assert "optim_state" not in data
         default_ckpt.update(data)
-        torch.save(default_ckpt, os.path.join(CHECKPOINT_PATH, f'{PHASE}_{MODEL_TYPE.name}_{DATASET_TYPE.name}.ckpt'))
+        torch.save(default_ckpt, os.path.join(self.checkpoint_path, f'{self.phase}_{self.model_name}_{self.dataset_name}.ckpt'))
     
 if __name__ == "__main__":
     print(Trainer())

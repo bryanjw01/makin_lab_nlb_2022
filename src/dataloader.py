@@ -1,4 +1,4 @@
-from config import DATAPATH_DICT, DATASET_TYPE, PHASE, BIN_SIZE, TEST_SIZE
+from config import DATAPATH_DICT
 import numpy as np
 
 from nlb_tools.nwb_interface import NWBDataset
@@ -7,16 +7,16 @@ from nlb_tools.make_tensors import make_train_input_tensors, make_eval_input_ten
 import torch 
 
 class DataLoader:
-    def __init__(self):
-        self.train_input, self.train_output, self.eval_input, self.train_dict, self.eval_dict, self.dataset = self.get_data(DATASET_TYPE.name, PHASE, BIN_SIZE)
-        self.train_size = int(round(self.training_input.shape[0] * (1 - TEST_SIZE)))
+    def __init__(self, dataset_name, phase='test', bin_size='5', test_size='0.25'):
+        self.train_input, self.train_output, self.eval_input, self.train_dict, self.eval_dict, self.dataset = self.get_data(dataset_name, phase, bin_size)
+        self.train_size = int(round(self.training_input.shape[0] * (1 - test_size)))
         
 
     def get_data(self, dataset_name, phase='test', bin_size=5):
         """Function that extracts and formats data for training model"""
         dataset = NWBDataset(DATAPATH_DICT[dataset_name], 
             skip_fields=['cursor_pos', 'eye_pos', 'cursor_vel', 'eye_vel', 'hand_pos'])
-        dataset.resample(5)
+        dataset.resample(bin_size)
         train_split = ['train', 'val'] if phase == 'test' else 'train'
         eval_split = phase
         train_dict = make_train_input_tensors(dataset, dataset_name, train_split, save_file=False, include_forward_pred=True)

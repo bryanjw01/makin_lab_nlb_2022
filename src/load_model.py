@@ -1,14 +1,11 @@
-from config import CHECKPOINT_PATH, MODEL_TYPE, DATASET_TYPE, PHASE
 import os
 import torch
 
 class Loader:
     @staticmethod
-    def load_model(model_name=None):
+    def load_model(checkpoint_path:str, phase:str, model_name:str, dataset_name:str):
         if model_name:
-            checkpoint = torch.load(os.path.join(CHECKPOINT_PATH, f'{PHASE}_{model_name}_{DATASET_TYPE.name}.ckpt'))
-        else:
-            checkpoint = torch.load(os.path.join(CHECKPOINT_PATH, f'{PHASE}_{MODEL_TYPE.name}_{DATASET_TYPE.name}.ckpt'))
+            checkpoint = torch.load(os.path.join(checkpoint_path, f'{phase}_{model_name}_{dataset_name}.ckpt'))
         return checkpoint
 
 if __name__ == "__main__":
