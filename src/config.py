@@ -22,13 +22,13 @@ USE_GPU = torch.cuda.is_available()
 
 MAX_GPUS = 1
 
-CHECKPOINT_PATH = './checkpoint/'
+CHECKPOINT_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/src/checkpoint'
 
-LOG_PATH = './log/'
+LOG_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/src/log'
 
-RESULT_PATH = '../results/'
+RESULT_PATH = '/Users/bryanjw01/code/makin_lab_nlb_2022/results'
 
-PHASE = 'test'
+PHASE = 'train' # 'test'
 
 DEVICE = torch.device('cuda' if USE_GPU else 'cpu')
 
@@ -40,16 +40,16 @@ VERBOSE = True
 
 PATIENCE = 5000
 
-EPOCHS = 20000
+EPOCHS = 50
 
 DATAPATH_DICT = {
-    'mc_maze': '../data/000128/sub-Jenkins/',
-    'mc_rtt': '../data/000129/sub-Indy/',
-    'area2_bump': '../data/000127/sub-Han/',
-    'dmfc_rsg': '../data/000130/sub-Haydn/',
-    'mc_maze_large': '../data/000138/sub-Jenkins/',
-    'mc_maze_medium': '../data/000139/sub-Jenkins/',
-    'mc_maze_small': '../data/000140/sub-Jenkins/',
+    'mc_maze': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000128/sub-Jenkins/',
+    'mc_rtt': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000129/sub-Indy/',
+    'area2_bump': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000127/sub-Han/',
+    'dmfc_rsg': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000130/sub-Haydn/',
+    'mc_maze_large': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000138/sub-Jenkins/',
+    'mc_maze_medium': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000139/sub-Jenkins/',
+    'mc_maze_small': '/Users/bryanjw01/code/makin_lab_nlb_2022/data/000140/sub-Jenkins/',
 }
 
 CONFIG = {
@@ -61,6 +61,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2, 
+                'n_heads': 2,
                 'output_dim': 182,
                 'hidden_dim': 40,
                 'hidden_dropout': 0.1, 
@@ -76,6 +77,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2,
+                'n_heads': 2,
                 'output_dim': 130, 
                 'hidden_dim': 40, 
                 'hidden_dropout': 0.1, 
@@ -91,6 +93,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2,
+                'n_heads': 2,
                 'output_dim': 65,
                 'hidden_dim': 40, 
                 'hidden_dropout': 0.1, 
@@ -105,7 +108,8 @@ CONFIG = {
                 'CD_RATIO': 0.27, 
                 'LR': 0.001,
                 'n_layers_trans': 1, 
-                'n_layers': 2, 
+                'n_layers': 2,
+                'n_heads': 2, 
                 'output_dim': 54,
                 'hidden_dim': 40, 
                 'hidden_dropout': 0.1, 
@@ -121,6 +125,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2,
+                'n_heads': 2,
                 'output_dim': 162, 
                 'hidden_dim': 40, 
                 'hidden_dropout': 0.1, 
@@ -136,6 +141,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2,
+                'n_heads': 2,
                 'output_dim': 162,
                 'hidden_dim': 40,
                 'hidden_dropout': 0.1, 
@@ -151,6 +157,7 @@ CONFIG = {
                 'LR': 0.001,
                 'n_layers_trans': 1, 
                 'n_layers': 2,
+                'n_heads': 2,
                 'output_dim': 162, 
                 'hidden_dim': 40, 
                 'hidden_dropout': 0.1, 

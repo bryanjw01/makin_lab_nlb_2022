@@ -9,7 +9,7 @@ import torch
 class DataLoader:
     def __init__(self, dataset_name, phase='test', bin_size='5', test_size='0.25'):
         self.train_input, self.train_output, self.eval_input, self.train_dict, self.eval_dict, self.dataset = self.get_data(dataset_name, phase, bin_size)
-        self.train_size = int(round(self.training_input.shape[0] * (1 - test_size)))
+        self.train_size = int(round(self.train_input.shape[0] * (1 - test_size)))
         
 
     def get_data(self, dataset_name, phase='test', bin_size=5):
@@ -18,7 +18,7 @@ class DataLoader:
             skip_fields=['cursor_pos', 'eye_pos', 'cursor_vel', 'eye_vel', 'hand_pos'])
         dataset.resample(bin_size)
         train_split = ['train', 'val'] if phase == 'test' else 'train'
-        eval_split = phase
+        eval_split = 'test' if phase == 'test' else 'val'
         train_dict = make_train_input_tensors(dataset, dataset_name, train_split, save_file=False, include_forward_pred=True)
         eval_dict = make_eval_input_tensors(dataset, dataset_name, eval_split, save_file=False)
         training_input = np.concatenate([
@@ -49,13 +49,16 @@ class DataLoader:
         return self.dataset
     
     def get_train_set(self):
-        return torch.Tensor(self.train_input[:self.num_train]), torch.Tensor(self.train_output[:self.num_train])
+        return torch.Tensor(self.train_input[:self.train_size]), torch.Tensor(self.train_output[:self.train_size])
 
     def get_test_set(self):
-        return torch.Tensor(self.train_input[self.num_train:]), torch.Tensor(self.train_output[self.num_train:])
+        return torch.Tensor(self.train_input[self.train_size:]), torch.Tensor(self.train_output[self.train_size:])
 
     def get_val_set(self):
         return torch.Tensor(self.eval_input)
+
+    def get_train_input_set(self):
+        return torch.Tensor(self.train_input)
 
 if __name__ == "__main__":
     pass

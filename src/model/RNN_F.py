@@ -11,7 +11,7 @@ class RNN_F(nn.Module):
                                     batch_first=True,
                                     dropout=config['p'],
                                     bidirectional=True)
-
+        self.transform = torch.nn.Linear(config['hidden_dim']*2, config['output_dim'])
         self.dropout1 = torch.nn.Dropout(p=config['p1'])
         self.dropout2 = torch.nn.Dropout(p=config['p2'])
     

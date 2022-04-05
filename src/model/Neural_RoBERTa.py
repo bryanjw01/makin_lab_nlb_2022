@@ -2,7 +2,6 @@ from transformers import RobertaConfig, RobertaModel
 import torch
 from torch import nn
 
-
 class Neural_RoBERTa(nn.Module):
     def __init__(self, config):
         super(Neural_RoBERTa, self).__init__()
@@ -12,19 +11,18 @@ class Neural_RoBERTa(nn.Module):
                                         intermediate_size=config['output_dim']*2)
         
         model = RobertaModel(configuration)
+        self.model = model.encoder.layer[0]
         self.rnn = torch.nn.GRU(input_size=config['input_dim'],
                                     hidden_size=config['hidden_dim'],
                                     num_layers=config['n_layers'],
                                     batch_first=True,
                                     dropout=config['p'],
                                     bidirectional=True)
-
+        self.transform = torch.nn.Linear(config['hidden_dim']*2, config['output_dim'])
+        self.transform2 = torch.nn.Linear(config['output_dim'], config['output_dim'])
         self.dropout1 = torch.nn.Dropout(p=config['p1'])
         self.dropout2 = torch.nn.Dropout(p=config['p2'])
-        self.transform = torch.nn.Linear(config['output_dim']*2, config['output_dim'])
-        self.model = model.encoder.layer[0]
         self.dropout3 = torch.nn.Dropout(p=config['p3'])
-        self.transform2 = torch.nn.Linear(config['output_dim'], config['output_dim'])
     
     def forward(self, X):
         output, _ = self.rnn(self.dropout1(X))
