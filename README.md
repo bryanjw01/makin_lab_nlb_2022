@@ -25,9 +25,10 @@ Neural Latent Workshop Submission
       ```
       make download_mc_maze_small 
       ```
-3. Edit makin_lab_nlb_2022/src/config.py:
-   * Change paths (LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, DATA_PATH_DICT)
-   * Choose dataset + model
+3. Run config unittest:
+    ```
+    make test
+    ```
 
 4. Running 
    ```
