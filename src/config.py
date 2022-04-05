@@ -1,11 +1,12 @@
-from Model.Neural_RoBERTa import Neural_RoBERTa
-
-
 MODEL_NAME = ''
 
 DATASET_NAME = 'mc_maze_small'
 
 CHECKPOINT_PATH = '../checkpoint/'
+
+PHASE = 'test'
+
+BIN_SIZE = 5
 
 DATAPATH_DICT = {
     'mc_maze': '../data/000128/sub-Jenkins/',

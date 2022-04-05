@@ -1,12 +1,12 @@
-from config import DATAPATH_DICT, DATASET_NAME
+from config import DATAPATH_DICT, DATASET_NAME, PHASE, BIN_SIZE
 import numpy as np
 
 from nlb_tools.nwb_interface import NWBDataset
 from nlb_tools.make_tensors import make_train_input_tensors, make_eval_input_tensors
 
 class DataLoader:
-    def __init__(self, phase='test', bin_size=5):
-        self.training_input, self.training_output, self.eval_input, self.dataset = self.get_data(DATASET_NAME, phase, bin_size)
+    def __init__(self):
+        self.training_input, self.training_output, self.eval_input, self.dataset = self.get_data(DATASET_NAME, PHASE, BIN_SIZE)
 
     def get_data(self, dataset_name, phase='test', bin_size=5):
         """Function that extracts and formats data for training model"""
