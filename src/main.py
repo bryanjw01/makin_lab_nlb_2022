@@ -2,10 +2,11 @@ import sys
 sys.path.append('src')
 
 import argparse
-from dataloader import DataLoader as DL
 from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, VERBOSE, \
     EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, MODEL, TRAIN
+from dataloader import DataLoader as DL
 from load_model import Loader
+import logging
 import gc
 
 from nlb_tools.evaluation import evaluate
