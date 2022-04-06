@@ -2,10 +2,11 @@ import sys
 sys.path.append('src')
 
 import argparse
-from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, VERBOSE, \
-    EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, MODEL, TRAIN
+from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, \
+    EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, TRAIN, LEVEL, MODEL
 from dataloader import DataLoader as DL
 from load_model import Loader
+from logger import setup_logger
 import logging
 import gc
 
@@ -28,12 +29,15 @@ elif MODEL_TYPE == MODEL.NEURAL_ROBERTA:
 elif MODEL_TYPE == MODEL.NEURAL_R_ROBERTA:
     from model.Neural_r_RoBERTa import Neural_r_RoBERTa as Model
 
+
+
 def main():
     # Extract data
-    print("Loading Data")
+    logger.debug("Loading Data")
     dl = DL(DATASET_TYPE.value, PHASE, BIN_SIZE, TEST_SIZE)
+    logger.debug("Successfully Loaded Data")
     if TRAIN:
-        print("Loading Model")
+        logger.debug("Loading Model")
         # Load model config
         cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
 
@@ -44,8 +48,9 @@ def main():
         # Create Model
         model = Model(cfg).to(DEVICE)
         train_input, train_output = dl.get_train_set()
-        val_input, val_output = dl.get_test_set() 
-        print("Creating Trainer")
+        val_input, val_output = dl.get_test_set()
+        logger.debug("Successfully Loaded Model") 
+        logger.debug("Creating Trainer")
         # Init the Trainer class
         runner = Trainer(
             model=model,
@@ -59,10 +64,12 @@ def main():
             use_gpu=USE_GPU,
             device=DEVICE
         )
-
+        logger.debug("Successfully Created Trainer")
+        logger.debug("Starting Training")
         # Start Training Process
-        train_log = runner.train(n_iter=EPOCHS, patience=PATIENCE, verbose=VERBOSE)
-
+        train_log = runner.train(n_iter=EPOCHS, patience=PATIENCE)
+        logger.debug("Finished Training")
+        logger.debug("Saving Training Stats")
         # Logging Training Losses
         train_log = pd.DataFrame(train_log)
         train_log.to_csv(os.path.join(LOG_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}_train_log.csv'))
@@ -80,15 +87,16 @@ def main():
         cfg['output_dim'] = dl.train_output.shape[2]
 
         # Create Model
-        print('Loading Best Model')
         model = Model(cfg)
         model.to(DEVICE)
 
-        if EPOCHS != 0:
+        if EPOCHS > 0:
+            logger.debug('Loading Best Model')
             checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
             assert checkpoint, f"Checkpoint for model is {checkpoint}"
             model.load_state_dict(checkpoint['state_dict'])
             model.to(DEVICE)
+        logger.debug('Finished Loading Model')
 
     else:
         # Load Best Model
@@ -99,23 +107,25 @@ def main():
         cfg['output_dim'] = dl.train_output.shape[2]
 
         # Create Model
-        print('Loading Best Model')
+        logger.debug('Loading Best Model')
         model = Model(cfg)
         model.to(DEVICE)
         checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
         assert checkpoint, f"Checkpoint for model is {checkpoint}"
         model.load_state_dict(checkpoint['state_dict'])
         model.to(DEVICE)
+        logger.debug('Finished Loading Model')
 
     # Evaluate train set + eval set
-    print('Starting Evaluation Step')
+    logger.debug('Evaluation Data')
     model.eval()
     training_predictions = model(dl.get_train_input_set().to(DEVICE)).cpu().detach().numpy()
     eval_predictions = model(dl.get_val_set().to(DEVICE)).cpu().detach().numpy()
+    logger.debug('Finished Evaluation Data')
 
     tlen = dl.train_dict['train_spikes_heldin'].shape[1]
     num_heldin = dl.train_dict['train_spikes_heldin'].shape[2]
-    print('Creating Submission')
+    logger.debug('Creating Submission')
     submission = {
         DATASET_TYPE.value: {
             'train_rates_heldin': training_predictions[:, :tlen, :num_heldin],
@@ -126,24 +136,22 @@ def main():
             'eval_rates_heldout_forward': eval_predictions[:, tlen:, num_heldin:]
         }
     }
-    print('saving submission')
+    logger.debug('Saving Submission')
     save_to_h5(submission, os.path.join(RESULT_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}.h5'), overwrite=True)
 
     if PHASE == 'train':
+        logger.debug('Evaluating Submission')
         target_dict = make_eval_target_tensors(dataset=dl.get_dataset(), 
                                        dataset_name=DATASET_TYPE.value,
                                        train_trial_split='train',
                                        eval_trial_split='val',
                                        include_psth=True,
                                        save_file=False)
-        print(evaluate(target_dict, submission))
+        logger.info(f'Results: {evaluate(target_dict, submission)}')
 
 if __name__ == "__main__":
-    '''
-        TODO: 
-            Add argparser to take care of 
-            num epochs, train/eval, phase, dataset, model, bin_size, test_size
-
-            Create Logger
-    '''
+    # Setup logger
+    logger = logging.getLogger('main')
+    logger = setup_logger(logger, '', '', '%(levelname)s | %(name)s | %(message)s', LEVEL.value)
+    # Call Main
     main()

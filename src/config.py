@@ -1,4 +1,5 @@
 from enum import Enum
+import logging
 import os
 import torch 
 
@@ -34,6 +35,13 @@ class DATASET(Enum):
     MC_MAZE_MEDIUM = 'mc_maze_medium'
     MC_MAZE_SMALL = 'mc_maze_small'
 
+class LOGGING(Enum):
+    DEBUG = logging.DEBUG # All messages will be displayed
+    INFO = logging.INFO # Only the training/eval loss and results will be displayed 
+    WAN = logging.WARN # Nothing will be displayed
+
+LEVEL = LOGGING.DEBUG
+
 MODEL_TYPE = MODEL.NEURAL_ROBERTA
 
 DATASET_TYPE = DATASET.MC_MAZE_SMALL
@@ -46,11 +54,9 @@ TEST_SIZE = 0.25
 
 BIN_SIZE = 5
 
-VERBOSE = True
-
 PATIENCE = 5000
 
-EPOCHS = 50
+EPOCHS = 500
 
 USE_GPU = torch.cuda.is_available()
 

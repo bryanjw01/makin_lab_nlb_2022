@@ -1,12 +1,20 @@
 import numpy as np
 import os
 
+from config import LEVEL
+from logger import setup_logger
+import logging
+
 from nlb_tools.nwb_interface import NWBDataset
 from nlb_tools.make_tensors import make_train_input_tensors, make_eval_input_tensors
 from nlb_tools.evaluation import evaluate
 
 import torch 
 from torch import nn
+
+
+logger = logging.getLogger('train')
+logger = setup_logger(logger, '', '', '%(levelname)s | %(name)s | %(message)s', LEVEL.value)
 
 class Trainer:
     """Class that handles training"""
@@ -78,7 +86,7 @@ class Trainer:
             predictions[:, :, -num_heldout:], output[:, :, -num_heldout:])
         return {f'{prefix}_nll': loss.item(), f'{prefix}_cosmooth_nll': cosmooth_loss.item()}, predictions
 
-    def train(self, n_iter=1000, patience=200, verbose=False, log_frequency=50):
+    def train(self, n_iter=1000, patience=200, log_frequency=50):
         """Trains model for given number of iterations with early stopping"""
         train_log = []
         best_score = 1e8
@@ -87,9 +95,8 @@ class Trainer:
             res, output = self.train_epoch()
             res['iter'] = i
             train_log.append(res)
-            if verbose:
-                if (i % log_frequency) == 0:
-                    print(res)
+            if (i % log_frequency) == 0:
+                logger.info(res)
             if res['val_nll'] < best_score:
                 best_score = res['val_nll']
                 last_improv = i
