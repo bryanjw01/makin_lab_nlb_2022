@@ -1,7 +1,3 @@
-import sys
-sys.path.append('src')
-
-import argparse
 from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, \
     EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, TRAIN, LEVEL, MODEL
 from dataloader import DataLoader as DL

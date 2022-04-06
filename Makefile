@@ -109,7 +109,7 @@ test: test_config
 
 # Run main.py file to 
 run:
-	python3 -m src.main 
+	python3 src/main.py 
 
 # Get rid of pycache inside tests folder directory
 clean_tests:
@@ -129,11 +129,11 @@ clean_results:
 
 # Get rid of all ckpt files from checkpoint directory
 clean_checkpoint:
-	rm -r -f src/checkpoint/*.ckpt
+	rm -r -f checkpoint/*.ckpt
 
 # Get rid of all csv files from log directory
 clean_log:
-	rm -r -f src/log/*.csv
+	rm -r -f log/*.csv
 
 # Get rid of pycache
 clean: clean_tests clean_src

@@ -5,9 +5,9 @@ import torch
 
 DIR_NAME = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 
-CHECKPOINT_PATH = f'{DIR_NAME}/src/checkpoint'
+CHECKPOINT_PATH = f'{DIR_NAME}/checkpoint'
 
-LOG_PATH = f'{DIR_NAME}/src/log'
+LOG_PATH = f'{DIR_NAME}/log'
 
 RESULT_PATH = f'{DIR_NAME}/results'
 
@@ -54,9 +54,9 @@ TEST_SIZE = 0.25
 
 BIN_SIZE = 5
 
-PATIENCE = 5000
+PATIENCE = 1000
 
-EPOCHS = 500
+EPOCHS = 50
 
 USE_GPU = torch.cuda.is_available()
 

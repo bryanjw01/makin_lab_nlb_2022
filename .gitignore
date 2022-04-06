@@ -130,6 +130,6 @@ dmypy.json
 
 # Directory
 /data/
-/src/log
-/src/checkpoint 
+/log
+/checkpoint 
 /results/
