@@ -102,7 +102,7 @@ download_all: download_mc_maze_small download_mc_maze_medium download_mc_maze_la
 
 # Test config.py
 test_config:
-	python3 -m unittest tests/src/test_config.py
+	python3 -m unittest tests.src.test_config
 
 # Test all
 test: test_config

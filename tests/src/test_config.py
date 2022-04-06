@@ -1,9 +1,6 @@
-import os, sys
-dir_path = os.path.dirname(os.path.realpath(__file__)).split('/')[:-2]
-sys.path.append('/'.join(dir_path) + '/src')
-
+import os
 import unittest
-from config import CHECKPOINT_PATH, LOG_PATH, RESULT_PATH, DATAPATH_DICT, MODEL_TYPE, DATASET_TYPE, MODEL, DATASET
+from src.config import CHECKPOINT_PATH, LOG_PATH, RESULT_PATH, DATAPATH_DICT, MODEL_TYPE, DATASET_TYPE, MODEL, DATASET
 
 class TestConfig(unittest.TestCase):
 	
