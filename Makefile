@@ -1,3 +1,67 @@
+
+# Shows all make commands with descriptions
+help:
+	@echo "----------------------------------------------------------------"
+	@echo "Environment Setup:"
+	@echo
+	@echo "  setup   - pip installs all dependencies from requirements.txt"
+	@echo "            file by using pip -r command"
+	@echo
+	@echo "  test   - Runs unittest which verifies all paths and dependencies"
+	@echo "            are correct"
+	@echo
+	@echo
+	@echo "Download Data:"
+	@echo
+	@echo "  download_all			- downloads all of the dataset using dandi and"
+	@echo "               			  moves the downloaded folder inside of the data"
+	@echo "               			  folder"
+	@echo
+	@echo "  download_mc_maze_small	- downloads the mc_maze_small dataset using dandi"
+	@echo "               			  and moves the downloaded folder inside of the"
+	@echo "               			  data folder"
+	@echo
+	@echo "  download_mc_maze_medium	- downloads the mc_maze_medium dataset using dandi"
+	@echo "               			  and moves the downloaded folder inside of the"
+	@echo "               			  data folder"
+	@echo
+	@echo "  download_mc_maze_large	- downloads the mc_maze_large dataset using dandi"
+	@echo "               			  and moves the downloaded folder inside of the"
+	@echo "               			  data folder"
+	@echo
+	@echo "  download_mc_maze		- downloads the mc_maze dataset using dandi and"
+	@echo "               			  moves the downloaded folder inside of the data"
+	@echo "               			  folder"
+	@echo
+	@echo "  download_mc_rtt		- downloads the mc_rtt dataset using dandi and"
+	@echo "               			  moves the downloaded folder inside of the data"
+	@echo "               			  folder"
+	@echo
+	@echo "  download_dmfc			- downloads the dmfc_rsg dataset using dandi and"
+	@echo "               			  moves the downloaded folder inside of the data"
+	@echo "               			  folder"
+	@echo
+	@echo "  download_area2bump		- downloads the area2bump dataset using dandi and "
+	@echo "                    		  moves the downloaded folder inside of the data"
+	@echo "                    		  folder"
+	@echo
+	@echo
+	@echo "Running Code:"
+	@echo
+	@echo "  run		- Runs main.py function"
+	@echo 
+	@echo
+	@echo "Cleaning:"
+	@echo
+	@echo "  clean         - removes pycache from test and src directories"
+	@echo
+	@echo "  veryclean     - removes all h5, csv, and ckpt files as well"
+	@echo "----------------------------------------------------------------"
+
+# Setup Environment
+setup:
+	pip install -r requirements.txt
+
 # Download mc_maze_small dataset from dandi
 download_mc_maze_small:
 	dandi download https://dandiarchive.org/dandiset/000140
@@ -36,20 +100,16 @@ download_area2bump:
 # Download all datasets from dandi
 download_all: download_mc_maze_small download_mc_maze_medium download_mc_maze_large download_mc_maze download_mc_rtt download_dmfc download_area2bump
 
-# Run main.py file to 
-run:
-	python3 -m src.main 
-
-# Setup Environment
-setup:
-	pip install -r requirements.txt
-
 # Test config.py
 test_config:
 	python3 -m unittest tests/src/test_config.py
 
 # Test all
 test: test_config
+
+# Run main.py file to 
+run:
+	python3 -m src.main 
 
 # Get rid of pycache inside tests folder directory
 clean_tests:
