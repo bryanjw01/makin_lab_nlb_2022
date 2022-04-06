@@ -4,11 +4,11 @@ help:
 	@echo "----------------------------------------------------------------"
 	@echo "Environment Setup:"
 	@echo
-	@echo "  setup   - pip installs all dependencies from requirements.txt"
-	@echo "            file by using pip -r command"
+	@echo "  setup   			- pip installs all dependencies from requirements.txt"
+	@echo "            			  file by using pip -r command"
 	@echo
-	@echo "  test   - Runs unittest which verifies all paths and dependencies"
-	@echo "            are correct"
+	@echo "  test   			- Runs unittest which verifies all paths and dependencies"
+	@echo "            			  are correct"
 	@echo
 	@echo
 	@echo "Download Data:"
@@ -48,14 +48,14 @@ help:
 	@echo
 	@echo "Running Code:"
 	@echo
-	@echo "  run		- Runs main.py function"
+	@echo "  run				- runs main.py function"
 	@echo 
 	@echo
 	@echo "Cleaning:"
 	@echo
-	@echo "  clean         - removes pycache from test and src directories"
+	@echo "  clean         		- removes pycache from test and src directories"
 	@echo
-	@echo "  veryclean     - removes all h5, csv, and ckpt files as well"
+	@echo "  veryclean     		- removes all h5, csv, and ckpt files as well"
 	@echo "----------------------------------------------------------------"
 
 # Setup Environment
