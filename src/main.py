@@ -1,5 +1,5 @@
-from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, USE_GPU, \
-    EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, TRAIN, LEVEL, MODEL
+from config import CONFIG, LOG_PATH, RESULT_PATH, CHECKPOINT_PATH, PHASE, PATIENCE, TEST_SIZE, \
+    USE_GPU, EPOCHS, MODEL_TYPE, DATASET_TYPE, BIN_SIZE, DEVICE, MAX_GPUS, TRAIN, LEVEL, MODEL
 from dataloader import DataLoader as DL
 from load_model import Loader
 from logger import setup_logger
@@ -10,8 +10,6 @@ from nlb_tools.evaluation import evaluate
 from nlb_tools.make_tensors import make_eval_target_tensors
 from nlb_tools.make_tensors import save_to_h5
 
-
-import numpy as np
 import pandas as pd
 
 import os
@@ -25,7 +23,9 @@ elif MODEL_TYPE == MODEL.NEURAL_ROBERTA:
 elif MODEL_TYPE == MODEL.NEURAL_R_ROBERTA:
     from model.Neural_r_RoBERTa import Neural_r_RoBERTa as Model
 
-
+# Setup logger
+logger = logging.getLogger('main')
+logger = setup_logger(logger, '', '', '%(levelname)s | %(name)s | %(message)s', LEVEL.value)
 
 def main():
     # Extract data
@@ -45,7 +45,7 @@ def main():
         model = Model(cfg).to(DEVICE)
         train_input, train_output = dl.get_train_set()
         val_input, val_output = dl.get_test_set()
-        logger.debug("Successfully Loaded Model") 
+        logger.debug("Successfully Loaded Model")
         logger.debug("Creating Trainer")
         # Init the Trainer class
         runner = Trainer(
@@ -68,7 +68,9 @@ def main():
         logger.debug("Saving Training Stats")
         # Logging Training Losses
         train_log = pd.DataFrame(train_log)
-        train_log.to_csv(os.path.join(LOG_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}_train_log.csv'))
+        train_log.to_csv(
+            os.path.join(LOG_PATH, f'{PHASE}_{MODEL_TYPE.value}_{DATASET_TYPE.value}_train_log.csv')
+            )
 
         # Delete models and use garbage collection to clear memory
         del runner.model
@@ -146,8 +148,5 @@ def main():
         logger.info(f'Results: {evaluate(target_dict, submission)}')
 
 if __name__ == "__main__":
-    # Setup logger
-    logger = logging.getLogger('main')
-    logger = setup_logger(logger, '', '', '%(levelname)s | %(name)s | %(message)s', LEVEL.value)
     # Call Main
     main()

@@ -1,16 +1,10 @@
-import numpy as np
 import os
+import logging
+import numpy as np
+import torch 
 
 from config import LEVEL
 from logger import setup_logger
-import logging
-
-from nlb_tools.nwb_interface import NWBDataset
-from nlb_tools.make_tensors import make_train_input_tensors, make_eval_input_tensors
-from nlb_tools.evaluation import evaluate
-
-import torch 
-from torch import nn
 
 
 logger = logging.getLogger('train')
