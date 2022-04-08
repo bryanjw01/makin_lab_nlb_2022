@@ -22,11 +22,12 @@ Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
     make test
     ```
 4. Edit `src/config.py` File (optional)
-  * Can Change:
-    * number of epochs
-    * dataset
-    * model
-    * etc
+    * Params in config:
+      * number of epochs
+      * paths
+      * dataset
+      * model
+      * etc
 5. Running 
    ```
    make run
