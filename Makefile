@@ -61,6 +61,7 @@ help:
 # Setup Environment
 setup:
 	pip install -r requirements.txt
+	pip install dandi
 
 # Download mc_maze_small dataset from dandi
 download_mc_maze_small:
