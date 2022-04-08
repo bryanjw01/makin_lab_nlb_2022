@@ -1,5 +1,5 @@
 # makin_lab_nlb_2022
-Neural Latent Workshop Submission
+Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
 
 ## Requirements
    * python 3.7+
