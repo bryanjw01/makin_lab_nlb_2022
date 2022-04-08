@@ -23,9 +23,6 @@ Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
       ```
    * Otherwise:
       ```
-      pip install dandi
-      ```
-      ```
       make download_mc_maze_small 
       ```
 3. Run config unittest:
