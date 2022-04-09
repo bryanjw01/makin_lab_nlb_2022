@@ -14,23 +14,15 @@ Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
    make setup
    ```
 2. download datasets from dandi:
-   * If using **conda**:
-      ```
-      conda install -c conda-forge dandi
-      ```
-      ```
-      make download_mc_maze_small
-      ```
-   * Otherwise:
-      ```
-      make download_mc_maze_small 
-      ```
+    ```
+    make download_mc_maze_small 
+    ```
 3. Run config unittest:
     ```
     make test
     ```
-
-4. Running 
+4. Edit `src/config.py` File (optional)
+5. Running 
    ```
    make run
    ```
