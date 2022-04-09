@@ -21,7 +21,7 @@ Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
     ```
     make test
     ```
-4. Edit `src/config.py` File (optional)
+4. Edit `src/config.py` file
 5. Running 
    ```
    make run
