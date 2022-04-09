@@ -10,11 +10,13 @@ from nlb_tools.evaluation import evaluate
 from nlb_tools.make_tensors import make_eval_target_tensors
 from nlb_tools.make_tensors import save_to_h5
 
+import numpy as np
 import pandas as pd
 
 import os
 
 from train import Trainer
+import torch
 
 if MODEL_TYPE == MODEL.RNN_F:
     from model.RNN_F import RNN_F as Model
@@ -75,18 +77,13 @@ def main():
         # Delete models and use garbage collection to clear memory
         del runner.model
         del model
-
         gc.collect()
-        # Load Best Model
-        cfg = CONFIG[MODEL_TYPE.value][DATASET_TYPE.value]
-
-        # Add input and output dimension to cfg
-        cfg['input_dim'] = dl.train_input.shape[2]
-        cfg['output_dim'] = dl.train_output.shape[2]
 
         # Create Model
         model = Model(cfg)
-        model.to(DEVICE)
+        if USE_GPU and torch.cuda.is_available():
+            gpu_idxs = np.arange(min(MAX_GPUS, torch.cuda.device_count())).tolist()
+            model = torch.nn.DataParallel(model.to(DEVICE), device_ids=gpu_idxs)
 
         if EPOCHS > 0:
             logger.debug('Loading Best Model')
@@ -106,8 +103,14 @@ def main():
 
         # Create Model
         logger.debug('Loading Best Model')
+
+        # Create Model
         model = Model(cfg)
-        model.to(DEVICE)
+        if USE_GPU and torch.cuda.is_available():
+            gpu_idxs = np.arange(min(MAX_GPUS, torch.cuda.device_count())).tolist()
+            model = torch.nn.DataParallel(model.to(DEVICE), device_ids=gpu_idxs)
+        
+        # Loading Model
         checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
         assert checkpoint, f"Checkpoint for model is {checkpoint}"
         model.load_state_dict(checkpoint['state_dict'])
