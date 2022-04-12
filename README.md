@@ -13,11 +13,11 @@ In the field of Neuroscience, the amount of data available is significantly smal
 | NLP             | RoBERTa base     | ~125 Million  | ~160 GB       | 1.2800                    |
 | Computer Vision | EfficientNet-B7  | ~ 66 Million  | ~150 GB       | 2.2727                    | -->
 
-| Field           | Model           | Parameters    | Training Data        | Ratio = Data / Parameters |
-|-----------------|-----------------|---------------|----------------------|---------------------------|
-| Neuroscience    | NDT-2           | ~0.48 Million | ~ 51 MB (MC_RTT)     | 0.1062                    |
-| NLP             | RoBERTa base    | ~125 Million  | ~496 GB (Books+Wiki) | 3.9680                    |
-| Computer Vision | EfficientNet-B7 | ~ 66 Million  | ~150 GB (Imagenet)   | 2.2727                    |
+| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
+|-----------------|-----------------|------------|---------------------|---------------------------|
+| Neuroscience    | NDT-2           | ~0.48 M    | ~0.051 (MC_RTT)     | 0.1062                    |
+| NLP             | RoBERTa base    | ~125  M    | ~496   (Books+Wiki) | 3.9680                    |
+| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    |
 
 
 # Method
@@ -57,6 +57,22 @@ Based on the performance in the validation phase, we re-trained the top two mode
 | -------------------------------------- | ------ | ------ | ------ |
 | GRU(2) -> FF -> RoBERTa(1) -> FF ->exp | 0.2074 | 0.6410 | 0.1279 |
 | GRU(2) -> FF -> Conv -> FF -> exp      | 0.1959 | 0.6155 | 0.1065 |
+
+As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants).
+
+In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the predictions of the GRU model along with the RoBERTa variant to achieve the top score on MC_RTT. 
+
+# Results
+All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summarised below :
+
+| Rank | Model Architecture | co-bps | vel R2 | fp-bps | Parameters | Training Data | Ratio = Data / Parameters |
+| ---- | ------------------ | ------ | ------ | ------ | ---------- | ------------- | ------------------------- |
+| 1    | Neural r-RoBERTa   | 0.2168 | 0.6489 | 0.1341 | ~0.47 M    | ~0.051 GB     | 0.1085                    |
+| 2    | RNNf               | 0.2119 | 0.6133 | 0.1148 | ~0.15 M    | ~0.051 GB     | 0.3400                    |
+| 3    | Neural RoBERTa     | 0.2074 | 0.6410 | 0.1279 | ~0.32 M    | ~0.051 GB     | 0.1594                    |
+
+For the other 3 datasets, we didn't tune the models and submitted the results using the same hyper-parameters as used for MC_RTT dataset. This is especially true for MC_Maze where the training was interrupted midway for the submission. Hence we refrain from reporting results or claims about our model performance on these datasets.
+
 
 # Quickstart
 
