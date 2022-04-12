@@ -27,3 +27,4 @@ Neural Latent Workshop Submission. Top score for area2bump and mc_rtt.
    make run
    ```
   
+TESTING
