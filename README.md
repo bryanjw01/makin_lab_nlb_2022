@@ -34,23 +34,34 @@ We used Gated Recurrent Units (GRU) coupled with a feed-forward layer and maximi
 However, we found that NDT achieves better scores for the metrics vel R2 and fp-bps. In the above model, we're using the RNN to predict forward in time and the feed forward layer to make the predictions in space (held_in + held_out neurons). Since our initial hypothesis was based on RNN's ability to make predictions in time, we experimented with the variants of the base model that would be a better estimator for space. The best results of these variants on on the **MC_RTT** dataset (**phase="val"**) is displayed below :
 
 
-| Model Architecture                          | co-bps | vel R2 | fp-bps |
-| ------------------------------------------- | ------ | ------ | ------ |
-| GRU(2) -> FF -> RoBERTa(1) -> FF ->exp	    | 0.2027 | 0.5311	| 0.1257 |
-| GRU(2) -> FF -> Conv -> FF -> exp           | 0.1987 | 0.5569 | 0.1225 |
+<!-- | Model Architecture                          | co-bps | vel R2 | fp-bps | -->
+<!-- | ------------------------------------------- | ------ | ------ | ------ | -->
+<!-- | GRU(2) -> FF -> RoBERTa(1) -> FF ->exp	    | 0.2027 | 0.5311	| 0.1257 | -->
+<!-- | GRU(2) -> FF -> Conv -> FF -> exp           | 0.1987 | 0.5569 | 0.1225 | -->
 <!-- | GRU(2) -> FF -> Deconv -> FF -> exp         | 0.1953 | 0.5280 | 0.1212 | -->
-| GRU(2) -> FF -> Conv(smooth) -> FF -> exp   | 0.1916 | 0.5311 | 0.1129 |
+<!-- | GRU(2) -> FF -> Conv(smooth) -> FF -> exp   | 0.1916 | 0.5311 | 0.1129 | -->
 <!-- | Conv -> GRU(2) -> FF -> Deconv -> FF -> exp | 0.1901 | 0.5383 | 0.0973 | -->
-| GRU(2) -> FF -> FF -> exp                   | 0.1880 | 0.5941 | 0.1142 |
-| GRU(2) -> FF -> FF -> Sigmoid               | 0.1844 | 0.5345 | 0.0860 |
-| Conv -> GRU(1) -> FF -> Sigmoid             | 0.1808 | 0.5375 | 0.1107 |
+<!-- | GRU(2) -> FF -> FF -> exp                   | 0.1880 | 0.5941 | 0.1142 | -->
+<!-- | GRU(2) -> FF -> FF -> Sigmoid               | 0.1844 | 0.5345 | 0.0860 | -->
+<!-- | Conv -> GRU(1) -> FF -> Sigmoid             | 0.1808 | 0.5375 | 0.1107 | -->
 <!-- | Conv -> Trans -> Deconv -> Trans -> exp     | 0.1753 | 0.4431 | 0.0655 | -->
 <!-- | Conv -> Trans -> Deconv -> Trans -> Sigmoid | 0.1750 | 0.4634 | 0.0565 | -->
 <!-- | Conv -> Trans -> Deconv -> Sigmoid          | 0.1726 | 0.3882 | 0.0706 | -->
 <!-- | Conv -> Trans -> Deconv -> FF -> Sigmoid    | 0.1704 | 0.3936 | 0.0653 | -->
-| Conv -> Trans -> FF -> Sigmoid              | 0.1555 | 0.3332 | 0.0601 |
+<!-- | Conv -> Trans -> FF -> Sigmoid              | 0.1555 | 0.3332 | 0.0601 | -->
 <!-- | Deconv -> Trans -> FF -> Sigmoid            | 0.1521 | 0.3609 | 0.0664 | -->
 <!-- | Deconv -> GRU(1) -> FF -> Sigmoid           | 0.1503 | 0.4233 | 0.0918 | -->
+
+
+| Model Architecture                          | co-bps | vel R2 | fp-bps |
+| ------------------------------------------- | ------ | ------ | ------ |
+| GRU(2) -> FF -> RoBERTa(1) -> FF ->exp	    | 0.2027 | 0.5311	| 0.1257 |
+| GRU(2) -> FF -> Conv -> FF -> exp           | 0.1987 | 0.5569 | 0.1225 |
+| GRU(2) -> FF -> Conv(smooth) -> FF -> exp   | 0.1916 | 0.5311 | 0.1129 |
+| GRU(2) -> FF -> FF -> exp                   | 0.1880 | 0.5941 | 0.1142 |
+| GRU(2) -> FF -> FF -> Sigmoid               | 0.1844 | 0.5345 | 0.0860 |
+| Conv -> GRU(1) -> FF -> Sigmoid             | 0.1808 | 0.5375 | 0.1107 |
+| Conv -> Trans -> FF -> Sigmoid              | 0.1555 | 0.3332 | 0.0601 |
 
 Sigmoid activation at the output in place of exp was noticed to converge faster. (Note : For the MC_RTT dataset, the maximum spikes per bin was identified to be 1). Based on the performance in the validation phase, we re-trained the top two models (in the table above) to get the following metrics on the **Test data** (phase="test") (on the leaderboard) :
 
