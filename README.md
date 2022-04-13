@@ -62,6 +62,12 @@ As seen from the above table, the RoBERTa based model achieves better vel R2 and
 
 In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the predictions of the GRU model along with the RoBERTa variant to achieve the top score on MC_RTT. 
 
+# Model Architecture
+| RNNf | Neural RoBERTa | Neural r-RoBERTa |
+|------|----------------|------------------|
+| ![RNNf](/images/RNNf.png) | ![Neural_RoBERTa](/images/Neural_RoBERTa.png)  | ![Neural_r_RoBERTa](/images/Neural_r_RoBERTa.png)  |
+
+
 # Results
 All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summarised below :
 
