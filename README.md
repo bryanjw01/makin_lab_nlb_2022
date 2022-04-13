@@ -31,7 +31,7 @@ We used Gated Recurrent Units (GRU) coupled with a feed-forward layer and maximi
 | MC_RTT  | GRU->FF->exp | val   | 0.2050 | 0.5813 | 0.1122 |
 | MC_RTT  | GRU->FF->exp | test  | 0.2119 | 0.6133 | 0.1148 |
 
-However, we found that NDT achieves better scores for the metrics vel R2 and fp-bps. Hence we experimented with the following variants on the **MC_RTT** dataset on **phase="val"**:
+However, we found that NDT achieves better scores for the metrics vel R2 and fp-bps. In the above model, we're using the RNN to predict forward in time and the feed forward layer to make the predictions in space (held_in + held_out neurons). Since our initial hypothesis was based on RNN's ability to make predictions in time, we experimented with the variants of the base model that would be a better estimator for space. The best results of these variants on on the **MC_RTT** dataset (**phase="val"**) is displayed below :
 
 
 | Model Architecture                          | co-bps | vel R2 | fp-bps |
@@ -58,7 +58,7 @@ Based on the performance in the validation phase, we re-trained the top two mode
 | GRU(2) -> FF -> RoBERTa(1) -> FF ->exp | 0.2074 | 0.6410 | 0.1279 |
 | GRU(2) -> FF -> Conv -> FF -> exp      | 0.1959 | 0.6155 | 0.1065 |
 
-As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants).
+As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants). This model was found to be more stable during training. The RNN half of the network predicts forward in time, the feed-forward expands in space and the transformer makes corrections in space to provide better results for vel R2 and fp-bps.
 
 In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the predictions of the GRU model along with the RoBERTa variant to achieve the top score on MC_RTT. 
 
