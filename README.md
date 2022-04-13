@@ -36,6 +36,7 @@ However, we found that NDT achieves better scores for the metrics vel R2 and fp-
 
 | Model Architecture                          | co-bps | vel R2 | fp-bps |
 | ------------------------------------------- | ------ | ------ | ------ |
+| GRU(2) -> FF -> RoBERTa(1) -> FF ->exp	    | 0.2027 | 0.5311	| 0.1257 |
 | GRU(2) -> FF -> Conv -> FF -> exp           | 0.1987 | 0.5569 | 0.1225 |
 | GRU(2) -> FF -> Deconv -> FF -> exp         | 0.1953 | 0.5280 | 0.1212 |
 | GRU(2) -> FF -> Conv(smooth) -> FF -> exp   | 0.1916 | 0.5311 | 0.1129 |
@@ -51,7 +52,7 @@ However, we found that NDT achieves better scores for the metrics vel R2 and fp-
 | Deconv -> Trans -> FF -> Sigmoid            | 0.1521 | 0.3609 | 0.0664 |
 | Deconv -> GRU(1) -> FF -> Sigmoid           | 0.1503 | 0.4233 | 0.0918 |
 
-Based on the performance in the validation phase, we re-trained the top two models (in the table above) to get the following metrics on the **Test data** (phase="test") (on the leaderboard) :
+Sigmoid activation at the output in place of exp was noticed to converge faster. (Note : For the MC_RTT dataset, the maximum spikes per bin was identified to be 1). Based on the performance in the validation phase, we re-trained the top two models (in the table above) to get the following metrics on the **Test data** (phase="test") (on the leaderboard) :
 
 | Model Architecture                     | co-bps | vel R2 | fp-bps |
 | -------------------------------------- | ------ | ------ | ------ |
