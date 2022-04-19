@@ -10,9 +10,7 @@ from nlb_tools.evaluation import evaluate
 from nlb_tools.make_tensors import make_eval_target_tensors
 from nlb_tools.make_tensors import save_to_h5
 
-import numpy as np
 import pandas as pd
-
 import os
 
 from train import Trainer
@@ -44,7 +42,7 @@ def main():
         cfg['output_dim'] = dl.train_output.shape[2]
 
         # Create Model
-        model = Model(cfg).to(DEVICE)
+        model = Model(cfg)
         train_input, train_output = dl.get_train_set()
         val_input, val_output = dl.get_test_set()
         logger.debug("Successfully Loaded Model")
@@ -80,17 +78,13 @@ def main():
         gc.collect()
 
         # Create Model
-        model = Model(cfg)
-        if USE_GPU and torch.cuda.is_available():
-            gpu_idxs = np.arange(min(MAX_GPUS, torch.cuda.device_count())).tolist()
-            model = torch.nn.DataParallel(model.to(DEVICE), device_ids=gpu_idxs)
+        model = Model(cfg).to(DEVICE)
 
         if EPOCHS > 0:
             logger.debug('Loading Best Model')
             checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)
             assert checkpoint, f"Checkpoint for model is {checkpoint}"
             model.load_state_dict(checkpoint['state_dict'])
-            model.to(DEVICE)
         logger.debug('Finished Loading Model')
 
     else:
@@ -105,10 +99,7 @@ def main():
         logger.debug('Loading Best Model')
 
         # Create Model
-        model = Model(cfg)
-        if USE_GPU and torch.cuda.is_available():
-            gpu_idxs = np.arange(min(MAX_GPUS, torch.cuda.device_count())).tolist()
-            model = torch.nn.DataParallel(model.to(DEVICE), device_ids=gpu_idxs)
+        model = Model(cfg).to(DEVICE)
         
         # Loading Model
         checkpoint = Loader.load_model(CHECKPOINT_PATH, PHASE, MODEL_TYPE.value, DATASET_TYPE.value)

@@ -13,11 +13,9 @@ logger = setup_logger(logger, '', '', '%(levelname)s | %(name)s | %(message)s', 
 class Trainer:
     """Class that handles training"""
     def __init__(self, model, data, train_cfg, num_gpus, model_name, dataset_name, checkpoint_path, phase='test', use_gpu=True, device=torch.device('cpu')):
-        self.model = model
+        self.model = model.to(device)
         self.data = data
         if use_gpu and torch.cuda.is_available():
-            gpu_idxs = np.arange(min(num_gpus, torch.cuda.device_count())).tolist()
-            self.model = torch.nn.DataParallel(self.model.to(device), device_ids=gpu_idxs)
             self.data = tuple([d.to(device) for d in self.data])
         self.cd_ratio = train_cfg.get('cd_ratio', 0.2)
         self.optimizer = torch.optim.Adam(self.model.parameters(), 
