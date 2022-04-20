@@ -70,7 +70,7 @@ Sigmoid activation at the output in place of exp was noticed to converge faster.
 | GRU(2) -> FF -> RoBERTa(1) -> FF ->exp | 0.2074 | 0.6410 | 0.1279 |
 | GRU(2) -> FF -> Conv -> FF -> exp      | 0.1959 | 0.6155 | 0.1065 |
 
-As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants). This model was found to be more stable during training. The RNN half of the network predicts forward in time, the feed-forward expands in space and the transformer makes corrections in space to provide better results for vel R2 and fp-bps.
+As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants). This model was found to be more stable during training. The RNN half of the network predicts forward in time, the feed-forward expands in space and the transformer makes corrections in space to provide better results for vel R2 and fp-bps. Adding a Transformer layer on top of the RNN layer aggregates infomation from across time-steps and neuron channels to generate relatively more stable predictions.
 
 In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the predictions of the GRU model along with the RoBERTa variant to achieve the top score on MC_RTT. 
 
