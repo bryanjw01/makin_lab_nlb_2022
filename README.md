@@ -13,11 +13,17 @@ In the field of Neuroscience, the amount of data available is significantly smal
 | NLP             | RoBERTa base     | ~125 Million  | ~160 GB       | 1.2800                    |
 | Computer Vision | EfficientNet-B7  | ~ 66 Million  | ~150 GB       | 2.2727                    | -->
 
-| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
+<!--| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
 |-----------------|-----------------|------------|---------------------|---------------------------|
 | Neuroscience    | NDT-2           | ~0.48 M    | ~0.051 (MC_RTT)     | 0.1062                    |
 | NLP             | RoBERTa base    | ~125  M    | ~496   (Books+Wiki) | 3.9680                    |
-| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    |
+| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    | -->
+
+| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
+|-----------------|-----------------|------------|---------------------|---------------------------|
+| Neuroscience    | NDT-2           | ~0.07 M    | ~0.016 (area2_bump) | 0.2286                    |
+| NLP             | RoBERTa base    | ~125  M    | ~496   (Books+Wiki) | 3.9680                    |
+| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    | 
 
 
 # Method
