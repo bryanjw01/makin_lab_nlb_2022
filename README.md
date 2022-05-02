@@ -86,9 +86,6 @@ In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the 
 |------|----------------|------------------|
 | ![RNNf](/images/RNNf.png)  |  ![Neural_RoBERTa](/images/Neural_RoBERTa.png) |  ![Neural_r_RoBERTa](/images/Neural_r_RoBERTa.png) |
 
-
-
-
 # Results
 All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summarised below :
 
@@ -100,6 +97,22 @@ All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summaris
 
 For the other 3 datasets, we didn't tune the models and submitted the results using the same hyper-parameters as used for MC_RTT dataset. This is especially true for MC_Maze where the training was interrupted midway for the submission. Hence we refrain from reporting results or claims about our model performance on these datasets.
 
+# Training
+For the RNN base model, we searched over the following set of hyper-parameters :
+
+| Parameter       | Values                                                 |
+|-----------------|--------------------------------------------------------|
+| lr              | [0.0005, 0.001, 0.005, 0.01, 0.015]                    |
+| dropout         | [0.46, 0.5, 0.6]                                       |
+| l2_weight       | [0, 5e-7, 5e-8]                                        |
+| hidden          | [32, 40, 64]                                           |
+| num_layers      | [1, 2, 3]                                              |
+| bi-directional  | [True, False]                                          |
+| input_size      | [DT, dT]                                               |
+| mask_ratio      | [0.25, 0.27, 0.30]                                     |
+| mask_variants   | [dot line, dot strip line, strip line, dot L, strip L] |
+
+Please note that not all combinations from this were tested (exhaustively).
 
 # Quickstart
 
