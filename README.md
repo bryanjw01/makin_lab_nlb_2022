@@ -13,11 +13,17 @@ In the field of Neuroscience, the amount of data available is significantly smal
 | NLP             | RoBERTa base     | ~125 Million  | ~160 GB       | 1.2800                    |
 | Computer Vision | EfficientNet-B7  | ~ 66 Million  | ~150 GB       | 2.2727                    | -->
 
-| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
+<!--| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
 |-----------------|-----------------|------------|---------------------|---------------------------|
 | Neuroscience    | NDT-2           | ~0.48 M    | ~0.051 (MC_RTT)     | 0.1062                    |
 | NLP             | RoBERTa base    | ~125  M    | ~496   (Books+Wiki) | 3.9680                    |
-| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    |
+| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    | -->
+
+| Field           | Model           | Parameters | Training Data (GB)  | Ratio = Data / Parameters |
+|-----------------|-----------------|------------|---------------------|---------------------------|
+| Neuroscience    | NDT-2           | ~0.07 M    | ~0.016 (area2_bump) | 0.2286                    |
+| NLP             | RoBERTa base    | ~125  M    | ~496   (Books+Wiki) | 3.9680                    |
+| Computer Vision | EfficientNet-B7 | ~ 66  M    | ~150   (Imagenet)   | 2.2727                    | 
 
 
 # Method
@@ -70,7 +76,7 @@ Sigmoid activation at the output in place of exp was noticed to converge faster.
 | GRU(2) -> FF -> RoBERTa(1) -> FF ->exp | 0.2074 | 0.6410 | 0.1279 |
 | GRU(2) -> FF -> Conv -> FF -> exp      | 0.1959 | 0.6155 | 0.1065 |
 
-As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants). This model was found to be more stable during training. The RNN half of the network predicts forward in time, the feed-forward expands in space and the transformer makes corrections in space to provide better results for vel R2 and fp-bps.
+As seen from the above table, the RoBERTa based model achieves better vel R2 and fp-bps scores on the Test data compared to the GRU. (Note: for co-bps and fp-bps, it does better than the NDT variants). This model was found to be more stable during training. The RNN half of the network predicts forward in time, the feed-forward expands in space and the transformer makes corrections in space to provide better results for vel R2 and fp-bps. Adding a Transformer layer on top of the RNN layer aggregates infomation from across time-steps and neuron channels to generate relatively more stable predictions.
 
 In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the predictions of the GRU model along with the RoBERTa variant to achieve the top score on MC_RTT. 
 
@@ -79,9 +85,6 @@ In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the 
 | RNNf | Neural RoBERTa | Neural r-RoBERTa |
 |------|----------------|------------------|
 | ![RNNf](/images/RNNf.png)  |  ![Neural_RoBERTa](/images/Neural_RoBERTa.png) |  ![Neural_r_RoBERTa](/images/Neural_r_RoBERTa.png) |
-
-
-
 
 # Results
 All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summarised below :
@@ -94,6 +97,22 @@ All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summaris
 
 For the other 3 datasets, we didn't tune the models and submitted the results using the same hyper-parameters as used for MC_RTT dataset. This is especially true for MC_Maze where the training was interrupted midway for the submission. Hence we refrain from reporting results or claims about our model performance on these datasets.
 
+# Training
+For the *RNN* and *Neural RoBERTa* base models, we performed hyper-parameters semi-manually (Combination  grid search + manual tuning):
+
+| Parameter       | Values                                                 |
+|-----------------|--------------------------------------------------------|
+| lr              | [0.0005, 0.001, 0.005, 0.01, 0.015]                    |
+| dropout         | [0.46, 0.5, 0.6]                                       |
+| l2_weight       | [0, 5e-7, 5e-8]                                        |
+| hidden          | [32, 40, 64]                                           |
+| num_layers      | [1, 2, 3]                                              |
+| bi-directional  | [True, False]                                          |
+| input_size      | [DT, dT]                                               |
+| mask_ratio      | [0.25, 0.27, 0.30]                                     |
+| mask_variants   | [dot line, dot strip line, strip line, dot L, strip L] |
+
+** Please note that not all combinations from this were tested (exhaustively) and most of these tests where performed on *MC_RTT* dataset. The hyperparamters of other datasets either remained the same or changed through manual hyperparameter optimization.
 
 # Quickstart
 
