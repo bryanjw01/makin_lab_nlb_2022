@@ -114,9 +114,9 @@ For the *RNN* and *Neural RoBERTa* base models, we performed hyper-parameters se
 
 ** Please note that not all combinations from this were tested (exhaustively) and most of these tests where performed on *MC_RTT* dataset. The hyperparamters of other datasets either remained the same or changed through manual hyperparameter optimization.
 
-| Training Method |
-|------|
-| ![train](/images/train_eval.png)  |
+| Train + Eval | Train |
+|------|------|
+| ![train_eval](/images/train_eval.png)  | ![train](/images/train.png)  |
 
 # Quickstart
 
