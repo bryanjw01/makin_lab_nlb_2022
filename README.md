@@ -98,7 +98,7 @@ All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summaris
 For the other 3 datasets, we didn't tune the models and submitted the results using the same hyper-parameters as used for MC_RTT dataset. This is especially true for MC_Maze where the training was interrupted midway for the submission. Hence we refrain from reporting results or claims about our model performance on these datasets.
 
 # Training
-For the *RNN* and *Neural RoBERTa* base models, we performed hyper-parameters semi-manually (manually + grid search):
+For the *RNN* and *Neural RoBERTa* base models, we performed hyper-parameters semi-manually (Combination of optimizing manually + grid search):
 
 | Parameter       | Values                                                 |
 |-----------------|--------------------------------------------------------|
