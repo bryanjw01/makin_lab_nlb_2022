@@ -136,8 +136,8 @@ This is a table of how many *RNN* models we trained to perform hyper-parameter o
 | -------------- | -------------------- | ------------------- |
 | mc_maze        |             20 hrs |                 1   |
 | mc_rtt         |             45 hrs |                 15 |
-| area2_bump     |              45 hrs |                 15 |
-| dmfc_rsg       |             45 hrs |                 15 |
+| area2_bump     |              30 hrs |                 10 |
+| dmfc_rsg       |             30 hrs |                 10 |
 | mc_maze_large  |              40 hrs |                 15 |
 | mc_maze_medium |              0.5 hrs |                 1 |
 | mc_maze_small  |             2.5 hrs |                 15 |
