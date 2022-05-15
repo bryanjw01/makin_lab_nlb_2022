@@ -114,6 +114,38 @@ For the *RNN* and *Neural RoBERTa* base models, we performed hyper-parameters se
 
 ** Please note that not all combinations from this were tested (exhaustively) and most of these tests where performed on *MC_RTT* dataset. The hyperparamters of other datasets either remained the same or changed through manual hyperparameter optimization.
 
+We ended up training a lot of models per dataset to perform hyper-parameter optimization. 
+
+This is a table of how many *Neural RoBERTa* models we trained to perform hyper-parameter optimization:
+
+| Dataset        |  Total Training Time | # of Models Trained |
+| -------------- | -------------------- | ------------------- |
+| mc_maze        |             20 hrs |                 1   |
+| mc_rtt         |             45 hrs |                 15 |
+| area2_bump     |              15 hrs |                 5 |
+| dmfc_rsg       |             15 hrs |                 5 |
+| mc_maze_large  |              40 hrs |                 10 |
+| mc_maze_medium |              0.5 hrs |                 1 |
+| mc_maze_small  |             3.33 hrs |                 20 |
+
+** Please note that we optimize mc_maze_small since it was quick to train and used the same hyper-parameters for mc_maze_medium, mc_maze_large, and mc_maze. That is why we trained so few on dataset mc_maze_medium, mc_maze_large, and mc_maze. Also, we ran out of time to fully train mc_maze. Times are an approximation.
+
+This is a table of how many *RNN* models we trained to perform hyper-parameter optimization:
+
+| Dataset        |  Total Training Time | # of Models Trained |
+| -------------- | -------------------- | ------------------- |
+| mc_maze        |             20 hrs |                 1   |
+| mc_rtt         |             45 hrs |                 15 |
+| area2_bump     |              45 hrs |                 15 |
+| dmfc_rsg       |             45 hrs |                 15 |
+| mc_maze_large  |              40 hrs |                 15 |
+| mc_maze_medium |              0.5 hrs |                 1 |
+| mc_maze_small  |             2.5 hrs |                 15 |
+
+** Please note that we optimize mc_maze_small since it was quick to train and used the same hyper-parameters for mc_maze_medium, mc_maze_large, and mc_maze. That is why we trained so few on dataset mc_maze_medium, mc_maze_large, and mc_maze. Also, we ran out of time to fully train mc_maze. Times are an approximation.
+
+The following diagrams show the architecture of our training process:
+
 | Train + Eval | Train |
 |------|------|
 | ![train_eval](/images/train_eval.png)  | ![train](/images/train.png)  |
