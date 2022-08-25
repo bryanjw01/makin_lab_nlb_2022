@@ -82,7 +82,7 @@ In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the 
 
 # Model Architecture
 
-| RNNf | Neural RoBERTa | Neural RoBERTa+RNNF[Ensemble] |
+| RNNf | Neural RoBERTa | Neural RoBERTa+RNNF [Ensemble] |
 |------|----------------|------------------|
 | ![RNNf](/images/RNNf.png)  |  ![Neural_RoBERTa](/images/Neural_RoBERTa.png) |  ![Neural_r_RoBERTa](/images/Neural_r_RoBERTa.png) |
 
@@ -91,7 +91,7 @@ All 3 model submissions for **MC_RTT** on the **Leaderboard** have been summaris
 
 | Rank | Model Architecture | co-bps | vel R2 | fp-bps | Parameters | Training Data | Ratio = Data / Parameters |
 | ---- | ------------------ | ------ | ------ | ------ | ---------- | ------------- | ------------------------- |
-| 1    | Neural r-RoBERTa   | 0.2168 | 0.6489 | 0.1341 | ~0.47 M    | ~0.051 GB     | 0.1085                    |
+| 1    | Neural RoBERTA+RNNf [Ensemble]   | 0.2168 | 0.6489 | 0.1341 | ~0.47 M    | ~0.051 GB     | 0.1085                    |
 | 2    | RNNf               | 0.2119 | 0.6133 | 0.1148 | ~0.15 M    | ~0.051 GB     | 0.3400                    |
 | 3    | Neural RoBERTa     | 0.2074 | 0.6410 | 0.1279 | ~0.32 M    | ~0.051 GB     | 0.1594                    |
 
