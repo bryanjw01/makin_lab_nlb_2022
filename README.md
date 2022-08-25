@@ -82,7 +82,7 @@ In order to improve all three metrics (co-bps, vel R2, fp-bps), we combined the 
 
 # Model Architecture
 
-| RNNf | Neural RoBERTa | Neural RoBERTa+RNNF [Ensemble] |
+| RNNf | Neural RoBERTa | Neural RoBERTa + RNNF [Ensemble] |
 |------|----------------|------------------|
 | ![RNNf](/images/RNNf.png)  |  ![Neural_RoBERTa](/images/Neural_RoBERTa.png) |  ![Neural_r_RoBERTa](/images/Neural_r_RoBERTa.png) |
 
